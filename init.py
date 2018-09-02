@@ -7,20 +7,24 @@ Created on Fri Aug 24 23:08:00 2018
 """
 
 import glob, os
-from account import loadAccount, Account
+#from account import loadAccount, Account
+from account import *
 from termcolor import colored
 from distutils import util
 
 os.system('clear')
 
 # change working directory
-datapath = './data/'
+contents = glob.glob('*')
+datafolder = 'data'
+datapath = './' + datafolder + '/'
+if datafolder not in contents:
+    os.mkdir(datapath)
 os.chdir(datapath)
 
 # get and sort list of available pickles
 files = glob.glob('*.pkl')
 files = sorted(files,reverse=True)
-
 if not files:
     ans = raw_input('No pickles detected. Create new account? [Y/n] ')
     if util.strtobool(ans) == 1:
@@ -40,10 +44,12 @@ else:
         os.sys.exit()
 
 os.chdir('..')
-    
+
+# %% Control menu loop
 while True:
     if len(a.movements) >= 1:
         ans = raw_input('\nMovement(s): view (v), new (n), edit (e), delete (del)' \
+                        '\nMore info: forecast (f)' \
                         '\nAccount: save (s), quit (q)\n')
         if ans == 'n':
             a.inputForAddMovement()
@@ -60,6 +66,11 @@ while True:
         elif ans == 's':
             a.saveAccount()
             a.dispMovements()
+        elif ans == 'f':
+            b = inputForForecast(a)
+            os.system('clear')
+            a.dispMovements()
+            b.dispMovements()
         elif ans == 'q':
             os.system('clear')
             break
